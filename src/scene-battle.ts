@@ -27,13 +27,16 @@ export class SceneBattle extends Phaser.Scene {
   }
 
   create(): void {
+    this.cubicle.create(this);
+
     this.cards.map((card) => card.create(this));
     this.add.text(0, 0, 'Project Progress', {
       fontSize: '40px',
       fontFamily: "Helvetica",
     });
 
-    this.cubicle.create(this);
+
+    // this.physics.add.overlap(this.cubicle, healthGroup, spriteHitHealth);
   }
 
   update(): void {

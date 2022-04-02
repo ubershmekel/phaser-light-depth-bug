@@ -5,35 +5,10 @@ import { tweenPromise } from './utils';
 
 const imageKey = 'card-back';
 
-function effectTextFromCard(card: CardData) {
-  // const values = {
-  //   mh?: number;
-  //   mgr?: number;
-  //   fr?: number;
-  //   money?: number;
-  //   prog?: number;
-  //   time?: number;
-  // }
-  const parts = [];
-  const valKeys = ['mh', 'mgr', 'fr', 'money', 'prog', 'time'];
-  for (const key of valKeys) {
-    const val = card[key as keyof CardData] as number;
-    if (!val) {
-      continue;
-    }
-    let valText = String(val);
-    if (val > 0) {
-      valText = '+' + valText;
-    }
-    const text = `${key} ${valText}`;
-    parts.push(text);
-  }
-  return parts.join(', ');
-}
-
 export class CardObj {
   card: CardData;
   homePoint: Phaser.Math.Vector2;
+  sprite!: Phaser.GameObjects.Image;
 
   constructor(card: CardData, homePoint: Phaser.Math.Vector2) {
     this.card = card;
@@ -49,6 +24,7 @@ export class CardObj {
     const container = scene.add.container(100, 100);
 
     const sprite = scene.add.image(0, 0, imageKey);
+    this.sprite = sprite;
     container.add(sprite);
 
     const title = scene.add.text(-sprite.width / 2, -110, this.card.title, {
@@ -113,4 +89,31 @@ export class CardObj {
     //   gameObject.y = dropZone.y;
     // });
   }
+}
+
+
+function effectTextFromCard(card: CardData) {
+  // const values = {
+  //   mh?: number;
+  //   mgr?: number;
+  //   fr?: number;
+  //   money?: number;
+  //   prog?: number;
+  //   time?: number;
+  // }
+  const parts = [];
+  const valKeys = ['mh', 'mgr', 'fr', 'money', 'prog', 'time'];
+  for (const key of valKeys) {
+    const val = card[key as keyof CardData] as number;
+    if (!val) {
+      continue;
+    }
+    let valText = String(val);
+    if (val > 0) {
+      valText = '+' + valText;
+    }
+    const text = `${key} ${valText}`;
+    parts.push(text);
+  }
+  return parts.join(', ');
 }

@@ -24,6 +24,7 @@ https://twitter.com/ubershmekel
 
 * Cards UI
 * Card logic engine
+* Resource meters
 * 30 cards content
 * Card meta-game, choose a card to add to deck after each round
 * Card art
