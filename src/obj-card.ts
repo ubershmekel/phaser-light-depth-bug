@@ -5,6 +5,32 @@ import { tweenPromise } from './utils';
 
 const imageKey = 'card-back';
 
+function effectTextFromCard(card: CardData) {
+  // const values = {
+  //   mh?: number;
+  //   mgr?: number;
+  //   fr?: number;
+  //   money?: number;
+  //   prog?: number;
+  //   time?: number;
+  // }
+  const parts = [];
+  const valKeys = ['mh', 'mgr', 'fr', 'money', 'prog', 'time'];
+  for (const key of valKeys) {
+    const val = card[key as keyof CardData] as number;
+    if (!val) {
+      continue;
+    }
+    let valText = String(val);
+    if (val > 0) {
+      valText = '+' + valText;
+    }
+    const text = `${key} ${valText}`;
+    parts.push(text);
+  }
+  return parts.join(', ');
+}
+
 export class CardObj {
   card: CardData;
   homePoint: Phaser.Math.Vector2;
@@ -28,9 +54,18 @@ export class CardObj {
     const title = scene.add.text(-sprite.width / 2, -110, this.card.title, {
       fontSize: '14px',
       fontFamily: "Helvetica",
-      wordWrap: { width: sprite.width }
+      wordWrap: { width: sprite.width },
     });
     container.add(title);
+
+    const effectString = effectTextFromCard(this.card);
+    const effectsText = scene.add.text(-sprite.width / 2, 40, effectString, {
+      fontSize: '14px',
+      fontFamily: "Helvetica",
+      wordWrap: { width: sprite.width },
+      color: '#000',
+    });
+    container.add(effectsText);
 
     container.setSize(sprite.width, sprite.height);
     container.setInteractive();
