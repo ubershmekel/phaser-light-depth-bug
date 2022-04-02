@@ -14,8 +14,9 @@ export class SceneBattle extends Phaser.Scene {
 
   preload(): void {
     const randomCards = sampleSome(cardsList, 4);
-    randomCards.map((cardData) => {
-      this.cards.push(new CardObj(cardData));
+    randomCards.map((cardData, index) => {
+      const homePoint = new Phaser.Math.Vector2(300 + index * 180, 580);
+      this.cards.push(new CardObj(cardData, homePoint));
     });
     this.cards.map((card) => card.preload(this));
   }
