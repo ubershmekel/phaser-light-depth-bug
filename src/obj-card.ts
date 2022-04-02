@@ -58,7 +58,7 @@ export class CardObj extends Phaser.GameObjects.Container {
 
       // UNCOMMENT THIS setDepth TO SEE A STRANGE TEXTURE ISSUE WHEN YOU DRAG CARDS
       // COMMENT IT OUT AND EVERYTHING SEEMS TO BE FINE.
-      // this.setDepth(1);
+      this.setDepth(1);
 
       tweenPromise(this.scene, {
         targets: this,
