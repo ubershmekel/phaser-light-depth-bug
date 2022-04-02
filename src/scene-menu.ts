@@ -2,13 +2,13 @@ import 'phaser';
 import particleUrl from '../assets/particle.png';
 import gaspUrl from '../assets/gasp.mp3';
 
-export class MenuScene extends Phaser.Scene {
+export class SceneMenu extends Phaser.Scene {
   private startKey!: Phaser.Input.Keyboard.Key;
   private sprites: { s: Phaser.GameObjects.Image, r: number; }[] = [];
 
   constructor() {
     super({
-      key: 'MenuScene'
+      key: 'SceneMenu'
     });
   }
 
@@ -29,7 +29,7 @@ export class MenuScene extends Phaser.Scene {
 
     // this.add.image(100, 100, 'particle');
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 5; i++) {
       const x = Phaser.Math.Between(-64, 800);
       const y = Phaser.Math.Between(-64, 600);
 
