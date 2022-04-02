@@ -18,9 +18,11 @@ export class SceneBattle extends Phaser.Scene {
     const randomCards = sampleSome(cardsList, 4);
     randomCards.map((cardData, index) => {
       const homePoint = new Phaser.Math.Vector2(300 + index * 180, 580);
-      this.cards.push(new CardObj(cardData, homePoint));
+      const draggableCardObj = new CardObj(this, cardData, homePoint);
+      this.cards.push(draggableCardObj);
+      draggableCardObj;
     });
-    this.cards.map((card) => card.preload(this));
+    this.cards.map((card) => card.preload());
 
     this.cubicle = new CubicleObj();
     this.cubicle.preload(this);
@@ -29,7 +31,7 @@ export class SceneBattle extends Phaser.Scene {
   create(): void {
     this.cubicle.create(this);
 
-    this.cards.map((card) => card.create(this));
+    this.cards.map((card) => card.create());
     this.add.text(0, 0, 'Project Progress', {
       fontSize: '40px',
       fontFamily: "Helvetica",
@@ -37,6 +39,13 @@ export class SceneBattle extends Phaser.Scene {
 
 
     // this.physics.add.overlap(this.cubicle, healthGroup, spriteHitHealth);
+
+    this.input.on('dragend', (_pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite) => {
+      console.log("dragend", gameObject);
+      // gameObject.scale = 1.0;
+      (gameObject as any as CardObj).tweenHome();
+      gameObject.setDepth(0);
+    });
   }
 
   update(): void {

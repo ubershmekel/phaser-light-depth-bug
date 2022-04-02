@@ -5,70 +5,69 @@ import { tweenPromise } from './utils';
 
 const imageKey = 'card-back';
 
-export class CardObj {
+export class CardObj extends Phaser.GameObjects.Container {
   card: CardData;
   homePoint: Phaser.Math.Vector2;
-  sprite!: Phaser.GameObjects.Image;
 
-  constructor(card: CardData, homePoint: Phaser.Math.Vector2) {
+  constructor(scene: Phaser.Scene, card: CardData, homePoint: Phaser.Math.Vector2) {
+    super(scene);
     this.card = card;
     this.homePoint = homePoint;
+    scene.add.existing(this);
   }
 
-  preload(scene: Phaser.Scene) {
-    scene.load.image('card-object', gunRangeUrl);
-    scene.load.image(imageKey, cardbackUrl);
+  preload() {
+    this.scene.load.image('card-object', gunRangeUrl);
+    this.scene.load.image(imageKey, cardbackUrl);
   }
 
-  create(scene: Phaser.Scene) {
-    const container = scene.add.container(100, 100);
+  create() {
+    const sprite = this.scene.add.image(0, 0, imageKey);
+    this.add(sprite);
 
-    const sprite = scene.add.image(0, 0, imageKey);
-    this.sprite = sprite;
-    container.add(sprite);
-
-    const title = scene.add.text(-sprite.width / 2, -110, this.card.title, {
+    const title = this.scene.add.text(-sprite.width / 2, -110, this.card.title, {
       fontSize: '14px',
       fontFamily: "Helvetica",
       wordWrap: { width: sprite.width },
     });
-    container.add(title);
+    this.add(title);
 
     const effectString = effectTextFromCard(this.card);
-    const effectsText = scene.add.text(-sprite.width / 2, 40, effectString, {
+    const effectsText = this.scene.add.text(-sprite.width / 2, 40, effectString, {
       fontSize: '14px',
       fontFamily: "Helvetica",
       wordWrap: { width: sprite.width },
       color: '#000',
     });
-    container.add(effectsText);
+    this.add(effectsText);
 
-    container.setSize(sprite.width, sprite.height);
-    container.setInteractive();
-    scene.input.setDraggable(container);
-    scene.input.on('drag', (_pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite, dragX: number, dragY: number) => {
-      gameObject.x = dragX;
-      gameObject.y = dragY;
+    this.setSize(sprite.width, sprite.height);
+    this.setInteractive();
+    this.scene.input.setDraggable(this);
+    // this.scene.input.on('drag', (_pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite, dragX: number, dragY: number) => {
+    this.on('drag', (_pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+      // if (gameObject !== this) {
+      //   return;
+      // }
+      // gameObject.x = dragX;
+      // gameObject.y = dragY;
       // gameObject.scale = 1.3;
-      gameObject.setDepth(1);
-      tweenPromise(scene, {
-        targets: gameObject,
+      this.x = dragX;
+      this.y = dragY;
+      // console.log('drag', this.card.title);
+
+      // UNCOMMENT THIS setDepth TO SEE A STRANGE TEXTURE ISSUE WHEN YOU DRAG CARDS
+      // COMMENT IT OUT AND EVERYTHING SEEMS TO BE FINE.
+      // this.setDepth(1);
+
+      tweenPromise(this.scene, {
+        targets: this,
         scale: 1.3,
         duration: 40,
       });
     });
 
-    const tweenHome = () => {
-      tweenPromise(scene, {
-        targets: container,
-        x: this.homePoint.x,
-        y: this.homePoint.y,
-        scale: 1.0,
-        duration: 300,
-      });
-    };
-
-    tweenHome();
+    this.tweenHome();
 
     // const zone = scene.add.zone(500, 300, 200, 200).setDropZone();
     // //  Just a visual display of the drop zone
@@ -76,12 +75,7 @@ export class CardObj {
     // graphics.lineStyle(2, 0xffff00);
     // graphics.strokeRect(zone.x, zone.y, zone.width, zone.height);
     // graphics.strokeRect(zone.x + zone.input.hitArea.x, zone.y + zone.input.hitArea.y, zone.input.hitArea.width, zone.input.hitArea.height);
-    scene.input.on('dragend', (_pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite) => {
-      console.log("dragend");
-      // gameObject.scale = 1.0;
-      tweenHome();
-      gameObject.setDepth(0);
-    });
+
 
     // scene.input.on('drop', function (_pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite, dropZone: Phaser.GameObjects.Zone) {
     //   console.log("drop");
@@ -89,6 +83,18 @@ export class CardObj {
     //   gameObject.y = dropZone.y;
     // });
   }
+
+
+  tweenHome() {
+    console.log("tweenhome", this, this.card.title);
+    tweenPromise(this.scene, {
+      targets: this,
+      x: this.homePoint.x,
+      y: this.homePoint.y,
+      scale: 1.0,
+      duration: 300,
+    });
+  };
 }
 
 
