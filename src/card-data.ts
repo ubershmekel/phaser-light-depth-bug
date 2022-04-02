@@ -6,7 +6,7 @@
   * OKR Progress - prog
 */
 
-interface CardData {
+export interface CardData {
   title: string;
   mh?: number;
   mgr?: number;
@@ -16,7 +16,7 @@ interface CardData {
   time?: number;
 }
 
-export const cards: CardData[] = [
+export const cardsList: CardData[] = [
   {
     title: "Take the boss to the gun range",
     mgr: 5,

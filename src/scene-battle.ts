@@ -1,5 +1,7 @@
 import 'phaser';
 import { CardObj } from './obj-card';
+import { cardsList } from './card-data';
+import { sampleSome } from './utils';
 
 export class SceneBattle extends Phaser.Scene {
   cards: CardObj[] = [];
@@ -11,7 +13,10 @@ export class SceneBattle extends Phaser.Scene {
   }
 
   preload(): void {
-    this.cards.push(new CardObj());
+    const randomCards = sampleSome(cardsList, 4);
+    randomCards.map((cardData) => {
+      this.cards.push(new CardObj(cardData));
+    });
     this.cards.map((card) => card.preload(this));
   }
 
