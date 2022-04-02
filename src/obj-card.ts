@@ -73,8 +73,13 @@ export class CardObj {
     scene.input.on('drag', (_pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite, dragX: number, dragY: number) => {
       gameObject.x = dragX;
       gameObject.y = dragY;
-      gameObject.scale = 1.2;
+      // gameObject.scale = 1.3;
       gameObject.setDepth(1);
+      tweenPromise(scene, {
+        targets: gameObject,
+        scale: 1.3,
+        duration: 40,
+      });
     });
 
     const tweenHome = () => {
@@ -82,6 +87,7 @@ export class CardObj {
         targets: container,
         x: this.homePoint.x,
         y: this.homePoint.y,
+        scale: 1.0,
         duration: 300,
       });
     };
@@ -96,7 +102,7 @@ export class CardObj {
     // graphics.strokeRect(zone.x + zone.input.hitArea.x, zone.y + zone.input.hitArea.y, zone.input.hitArea.width, zone.input.hitArea.height);
     scene.input.on('dragend', (_pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite) => {
       console.log("dragend");
-      gameObject.scale = 1.0;
+      // gameObject.scale = 1.0;
       tweenHome();
       gameObject.setDepth(0);
     });

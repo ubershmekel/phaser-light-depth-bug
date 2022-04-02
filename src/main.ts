@@ -32,7 +32,7 @@ const GameConfig: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
-  backgroundColor: '#300000',
+  backgroundColor: '#202020',
   render: { pixelArt: false, antialias: true },
   scale: {
     mode: Phaser.Scale.FIT,
